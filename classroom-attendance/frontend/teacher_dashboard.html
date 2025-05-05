@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Teacher Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script type="module" src="./js/teacher_dashboard.js">
+    
+      
+  </script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+  <div class="flex justify-end mb-4">
+    <button id="logoutBtn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded">
+      Logout
+    </button>
+  </div>
+  <div class="max-w-7xl mx-auto p-6">
+    <h1 class="text-3xl font-bold text-indigo-700 mb-6">Welcome, <span id="teacherName">Teacher</span></h1>
+
+    <!-- Date Selector -->
+    <div class="mb-4 flex items-center gap-3">
+      <label class="font-semibold text-lg">Select Date:</label>
+      <input type="date" id="attendanceDate" class="border p-2 rounded" />
+    </div>
+
+    <!-- Attendance Table -->
+    <div class="bg-white shadow-lg rounded-2xl p-6 overflow-x-auto">
+      <h2 class="text-xl font-semibold mb-4">Student Attendance</h2>
+      <table class="min-w-full table-auto border-collapse text-sm text-left">
+        <thead class="bg-indigo-100 text-indigo-800">
+          <tr>
+            <th class="border p-2">Name</th>
+            <th class="border p-2">Reg. Number</th>
+            <th class="border p-2">Period</th>
+            <th class="border p-2">Status</th>
+            <th class="border p-2">Action</th>
+          </tr>
+        </thead>
+        <tbody id="attendanceBody">
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>

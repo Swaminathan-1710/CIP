@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login | Face Attendance</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Import Firebase with Modular Setup (Updated Version) -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js';
+    import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-auth.js';
+    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js';
+    
+    const firebaseConfig = {
+      apiKey: "AIzaSyCDXcADOtCyyCeG1pIzj95l65KeJg79yWs",
+      authDomain: "face-attendance-system-b5a5b.firebaseapp.com",
+      projectId: "face-attendance-system-b5a5b",
+      storageBucket: "face-attendance-system-b5a5b.firebasestorage.app",
+      messagingSenderId: "204947835687",
+      appId: "1:204947835687:web:0cb6f094a2ca62e0703702"
+    };
+    
+    // Initialize Firebase App
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    document.getElementById("loginForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value.trim();
+      const errorDisplay = document.getElementById("loginError");
+
+      // Clear previous error messages
+      errorDisplay.textContent = '';
+      errorDisplay.classList.add("hidden");
+
+      try {
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        const user = userCredential.user;
+        const uid = user.uid;
+
+        const userRef = doc(db, "users", uid);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          const userData = userSnap.data();
+
+          // Redirect based on role
+          if (userData.role === "student") {
+            window.location.href = "student_dashboard.html";
+          } else if (userData.role === "teacher") {
+            window.location.href = "teacher_dashboard.html";
+          } else {
+            errorDisplay.textContent = "User role not defined.";
+            errorDisplay.classList.remove("hidden");
+          }
+        } else {
+          errorDisplay.textContent = "No user data found.";
+          errorDisplay.classList.remove("hidden");
+        }
+      } catch (error) {
+        errorDisplay.textContent = "Error: " + error.message;
+        errorDisplay.classList.remove("hidden");
+      }
+    });
+  </script>
+  <script type="module" src="js/auth.js"></script>
+
+</head>
+
+<body class="bg-gradient-to-r from-blue-50 to-blue-100 min-h-screen flex items-center justify-center">
+  <div class="bg-white p-10 rounded-2xl shadow-xl max-w-md w-full">
+    <h2 class="text-3xl font-bold text-center text-blue-600 mb-6">Login</h2>
+
+    <form id="loginForm" class="space-y-6">
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1" for="email">Email</label>
+        <input type="email" id="email" required
+               class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <div>
+        <label class="block text-gray-700 font-semibold mb-1" for="password">Password</label>
+        <input type="password" id="password" required
+               class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400">
+      </div>
+
+      <button type="submit"
+              class="w-full bg-blue-600 text-white py-2 rounded-xl font-semibold hover:bg-blue-700 transition">
+        Login
+      </button>
+
+      <p class="text-center text-gray-600 mt-4">
+        Don't have an account?
+        <a href="register.html" class="text-blue-600 font-medium hover:underline">Register here</a>
+      </p>
+    </form>
+
+    <p id="loginError" class="text-red-500 text-center mt-4 hidden"></p>
+  </div>
+</body>
+</html>

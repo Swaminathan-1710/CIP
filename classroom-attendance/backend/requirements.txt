@@ -1,0 +1,6 @@
+Flask
+firebase-admin
+deepface
+opencv-python
+numpy
+pillow
